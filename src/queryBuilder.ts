@@ -7,11 +7,23 @@ export default class QueryBuilder {
     private filters: string[] = []
     private joins: string[] = []
     private order: string | null = null
+    private limit: number = -1
+    private isCount: boolean = false
 
     public constructor(client: httpClient, table: string, fields: string[]) {
         this.client = client
         this.table = table
         this.fields = fields
+    }
+
+    public top (limit: number) {
+        this.limit = limit
+        return this
+    }
+
+    public count (count: boolean = true) {
+        this.isCount = count
+        return this
     }
 
     public eq (field: string, value: string | number) {
@@ -61,16 +73,32 @@ export default class QueryBuilder {
     }
 
     private buildQuery() {
-        let query = `SELECT ${this.fields.join(', ')} FROM ${this.table}`
+        const fields = this.fields.join(', ')
+
+        let query = 'SELECT '
+        if (this.isCount) {
+            query += `COUNT (${fields})`
+        } else {
+            query += fields
+        }
+        query += ` FROM ${this.table}`
+
+        if (this.limit > 0) {
+            query += ` LIMIT ${this.limit}`
+        }
+
         if (this.joins.length > 0) {
             query += ` ${this.joins.join(' ')}`
         }
+
         if (this.filters.length > 0) {
             query += ` WHERE ${this.filters.join(' AND ')}`
         }
+
         if (this.order) {
             query += ` ORDER BY ${this.order}`
         }
+        
         return query
     }
 
