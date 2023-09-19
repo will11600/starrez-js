@@ -1,7 +1,7 @@
 {
-  "name": "example-typescript-package",
-  "version": "0.2.2",
-  "description": "",
+  "name": "starrez-js",
+  "version": "1.0.4-alpha.1",
+  "description": "An API for StarRez",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "umd:main": "dist/umd/index.js",
@@ -40,15 +40,15 @@
     "esm",
     "umd"
   ],
-  "author": "Tom Chen <tomchen.org@gmail.com>",
+  "author": "William Brocklesby <enquiries@william-brocklesby.com>",
   "license": "MIT",
-  "homepage": "https://github.com/tomchen/example-typescript-package",
+  "homepage": "https://william-brocklesby.com",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tomchen/example-typescript-package.git"
+    "url": "git@github.com:will11600/starrez-js.git"
   },
   "bugs": {
-    "url": "https://github.com/tomchen/example-typescript-package/issues"
+    "url": "https://github.com/will11600/starrez-js/issues"
   },
   "dependencies": {},
   "devDependencies": {
