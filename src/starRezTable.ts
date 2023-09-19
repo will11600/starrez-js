@@ -35,7 +35,7 @@ export default class starRezTable {
         return response.json()
     }
 
-    public async select(...fields: string[]) {
+    public select(...fields: string[]) {
         return new queryBuilder(this.client, this.tableName, fields)
     }
 
