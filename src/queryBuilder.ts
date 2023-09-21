@@ -57,13 +57,13 @@ export default class QueryBuilder {
         return this
     }
 
-    public leftJoin (table: string, field: string, value: string) {
-        this.joins.push(`LEFT JOIN ${table} ON ${this.table}.${field} = ${table}.${value}`)
+    public leftJoin (table: string, field: string, value: string, onTable: string = this.table) {
+        this.joins.push(`LEFT JOIN ${table} ON ${onTable}.${field} = ${table}.${value}`)
         return this
     }
 
-    public innerJoin (table: string, field: string, value: string) {
-        this.joins.push(`INNER JOIN ${table} ON ${this.table}.${field} = ${table}.${value}`)
+    public innerJoin (table: string, field: string, value: string, onTable: string = this.table) {
+        this.joins.push(`INNER JOIN ${table} ON ${onTable}.${field} = ${table}.${value}`)
         return this
     }
 

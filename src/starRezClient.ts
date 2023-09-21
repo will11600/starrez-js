@@ -21,4 +21,12 @@ export default class starRezClient {
         })
         return response.blob()
     }
+
+    public async execute(sql: string) {
+        const response = await this.client.post('query', sql, {
+            'Content-Type': 'text/plain',
+            'Accept': 'application/json'
+        })
+        return response.json()
+    }
 }
