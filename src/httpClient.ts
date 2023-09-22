@@ -25,7 +25,7 @@ export default class httpClient {
         if (!response.ok) {
             try {
                 const error = await response.json()
-                throw new Error(error.Description)
+                throw new Error(error[0].Description)
             } catch (e) {
                 throw new Error(`The HTTP response code did not indicate success: ${response.status} - ${response.statusText}`)
             }
