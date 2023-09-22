@@ -28,11 +28,15 @@ export default class starRezTable {
         await this.client.post(`setphoto/${this.tableName}/${id}`, photo)
     }
 
-    public async at(id: number) {
+    public async at(id: number): Promise<object> {
         const response = await this.client.get(`select/${this.tableName}/${id}`, {
             Accept: 'application/json'
         })
-        return response.json()
+        const json = await response.json()
+        if (json.length !== 1) {
+            throw new Error(`Expected 1 result, got ${json.length}`)
+        }
+        return json[0]
     }
 
     public select(...fields: string[]) {
