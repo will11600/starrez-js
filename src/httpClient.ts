@@ -23,7 +23,12 @@ export default class httpClient {
             body
         })
         if (!response.ok) {
-            throw new Error(`The HTTP response code did not indicate success: ${response.status} - ${response.statusText}`)
+            try {
+                const error = await response.json()
+                throw new Error(error.Description)
+            } catch (e) {
+                throw new Error(`The HTTP response code did not indicate success: ${response.status} - ${response.statusText}`)
+            }
         }
         return response
     }
