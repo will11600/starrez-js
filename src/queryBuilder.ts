@@ -9,15 +9,29 @@ export default class QueryBuilder {
     private order: string | null = null
     private limit: number = -1
     private isCount: boolean = false
+    private offset: number
 
     public constructor(client: httpClient, table: string, fields: string[]) {
         this.client = client
         this.table = table
         this.fields = fields
+
+        this.offset = 0
     }
 
     public top (limit: number) {
         this.limit = limit
+        return this
+    }
+
+    public range (offset: number, limit: number) {
+        this.offset = offset
+        this.limit = limit
+        return this
+    }
+
+    public skip(offset: number) {
+        this.offset = offset
         return this
     }
 
@@ -76,16 +90,17 @@ export default class QueryBuilder {
         const fields = this.fields.join(', ')
 
         let query = 'SELECT '
+
+        if (this.limit > 0) {
+            query += `TOP ${this.limit} `
+        }
+
         if (this.isCount) {
             query += `COUNT (${fields})`
         } else {
             query += fields
         }
         query += ` FROM ${this.table}`
-
-        if (this.limit > 0) {
-            query += ` LIMIT ${this.limit}`
-        }
 
         if (this.joins.length > 0) {
             query += ` ${this.joins.join(' ')}`
@@ -98,11 +113,15 @@ export default class QueryBuilder {
         if (this.order) {
             query += ` ORDER BY ${this.order}`
         }
+
+        if (this.offset > 0) {
+            query += ` OFFSET ${this.offset}`
+        }
         
         return query
     }
 
-    public async get(): Promise<any[]> {
+    public async get(): Promise<object[]> {
         const query = this.buildQuery()
         const response = await this.client.post('query', query, {
             'Content-Type': 'text/plain',
