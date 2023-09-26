@@ -136,6 +136,7 @@ export default class QueryBuilder {
     }
 
     public async get(): Promise<object[]> {
+    public async get(): Promise<object[]> {
         const query = this.buildQuery()
         const response = await this.client.post('query', query, {
             'Content-Type': 'text/plain',
