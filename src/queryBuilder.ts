@@ -10,7 +10,6 @@ export default class QueryBuilder {
     private limit: number = -1
     private isCount: boolean = false
     private offset: number
-    private offset: number
 
     public constructor(client: httpClient, table: string, fields: string[]) {
         this.client = client
@@ -18,23 +17,10 @@ export default class QueryBuilder {
         this.fields = fields
 
         this.offset = 0
-
-        this.offset = 0
     }
 
     public top (limit: number) {
         this.limit = limit
-        return this
-    }
-
-    public range (offset: number, limit: number) {
-        this.offset = offset
-        this.limit = limit
-        return this
-    }
-
-    public skip(offset: number) {
-        this.offset = offset
         return this
     }
 
@@ -100,6 +86,11 @@ export default class QueryBuilder {
         return this
     }
 
+    public in(field:string, query: QueryBuilder, not = false) {
+        this.filters.push(`${field} ${not ? 'NOT' : ''} IN (${query.buildQuery()})`)
+        return this
+    }
+
     private buildQuery() {
         const fields = this.fields.join(', ')
 
@@ -123,7 +114,7 @@ export default class QueryBuilder {
         if (this.filters.length > 0) {
             query += ` WHERE ${this.filters.join(' AND ')}`
         }
-
+        
         if (this.order) {
             query += ` ORDER BY ${this.order}`
         }
@@ -135,7 +126,6 @@ export default class QueryBuilder {
         return query
     }
 
-    public async get(): Promise<object[]> {
     public async get(): Promise<object[]> {
         const query = this.buildQuery()
         const response = await this.client.post('query', query, {
