@@ -100,6 +100,10 @@ export default class QueryBuilder {
             query += `TOP ${this.limit} `
         }
 
+        if (this.offset > 0) {
+            query += `START AT ${this.offset} `
+        }
+
         if (this.isCount) {
             query += `COUNT (${fields})`
         } else {
@@ -117,10 +121,6 @@ export default class QueryBuilder {
         
         if (this.order) {
             query += ` ORDER BY ${this.order}`
-        }
-
-        if (this.offset > 0) {
-            query += ` OFFSET ${this.offset}`
         }
         
         return query
