@@ -91,6 +91,13 @@ export default class QueryBuilder {
         return this
     }
 
+    public search(value: string, ...fields: string[]) {
+        if (fields.length < 1) { return }
+        const search = fields.map(field => `${field} CONTAINS '${value}'`)
+        this.filters.push(`(${search.join(' OR ')})`)
+        return this
+    }
+
     private buildQuery() {
         const fields = this.fields.join(', ')
 
