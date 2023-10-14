@@ -127,7 +127,7 @@ export default class QueryBuilder {
     }
 
     public search(value: string, ...fields: string[]) {
-        if (fields.length < 1) { return this }
+        if (fields.length < 1 || !value) { return this }
         const search = fields.map(field => `${field} CONTAINS '${value}'`)
         this.filters.push(`(${search.join(' OR ')})`)
         return this
@@ -147,7 +147,7 @@ export default class QueryBuilder {
         }
 
         if (this.isCount) {
-            query += `COUNT (${fields})`
+            query += `COUNT(${fields})`
         } else {
             query += fields
         }
@@ -161,7 +161,7 @@ export default class QueryBuilder {
             query += ` WHERE ${this.filters.join(' AND ')}`
         }
         
-        if (this.order) {
+        if (this.order && !this.isCount) {
             query += ` ORDER BY ${this.order}`
         }
         
