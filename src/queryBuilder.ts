@@ -40,14 +40,25 @@ export default class QueryBuilder {
         return this
     }
 
-    public eq (field: string, value: string | number) {
-        let filter = `${field} = `
+    private encapsulate (value: string | number) {
         if (typeof value === 'number') {
-            filter += value
-        } else {
-            filter += `'${value}'`
+            return value
         }
-        this.filters.push(filter)
+        return `'${value}'`
+    }
+
+    private appendLogicGroup (filters: string[]) {
+        this.filters.push(`(${filters.join(' OR ')})`)
+    }
+
+    public eq (field: string, value: string | number) {
+        this.filters.push(`${field} = ${this.encapsulate(value)}`)
+        return this
+    }
+
+    public eqOr (field: string, ...values: string[] | number[]) {
+        const comparisons = values.map(value => `${field} = ${this.encapsulate(value)}`)
+        this.appendLogicGroup(comparisons)
         return this
     }
 
@@ -56,8 +67,20 @@ export default class QueryBuilder {
         return this
     }
 
+    public gtOr (field: string, ...values: number[]) {
+        const comparisons = values.map(value => `${field} > ${value}`)
+        this.appendLogicGroup(comparisons)
+        return this
+    }
+
     public lt (field: string, value: number) {
         this.filters.push(`${field} < ${value}`)
+        return this
+    }
+
+    public ltOr (field: string, ...values: number[]) {
+        const comparisons = values.map(value => `${field} < ${value}`)
+        this.appendLogicGroup(comparisons)
         return this
     }
 
@@ -66,8 +89,20 @@ export default class QueryBuilder {
         return this
     }
 
+    public gteOr (field: string, ...values: number[]) {
+        const comparisons = values.map(value => `${field} >= ${value}`)
+        this.appendLogicGroup(comparisons)
+        return this
+    }
+
     public lte (field: string, value: number) {
         this.filters.push(`${field} <= ${value}`)
+        return this
+    }
+
+    public lteOr (field: string, ...values: number[]) {
+        const comparisons = values.map(value => `${field} <= ${value}`)
+        this.appendLogicGroup(comparisons)
         return this
     }
 
