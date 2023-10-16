@@ -50,7 +50,7 @@ export default class starRezTable {
         return response.json()
     }
 
-    public async createDefault() {
+    public async createDefault<T = any>(): Promise<T> {
         const response = await this.client.get(`createdefault/${this.tableName}`, {
             Accept: 'application/json'
         })

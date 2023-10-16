@@ -2,7 +2,8 @@ import starRezClient from './starRezClient'
 import starRezClientFactory from './starRezClientFactory'
 import queryBuilder from './queryBuilder'
 import starRezTable from './starRezTable'
-import {AuthenticationHeader, bearerToken, basicAuthentication} from './authentication'
+import { AuthenticationHeader, bearerToken, basicAuthentication } from './authentication'
+import email from './email'
 
 export {
     starRezClient,
@@ -11,5 +12,6 @@ export {
     starRezTable,
     AuthenticationHeader,
     bearerToken,
-    basicAuthentication
+    basicAuthentication,
+    email
 }

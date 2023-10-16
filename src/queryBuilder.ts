@@ -168,7 +168,7 @@ export default class QueryBuilder {
         return query
     }
 
-    public async get(): Promise<object[]> {
+    public async get<T = any>(): Promise<T[]> {
         const query = this.buildQuery()
         const response = await this.client.post('query', query, {
             'Content-Type': 'text/plain',
@@ -177,8 +177,8 @@ export default class QueryBuilder {
         return response.json()
     }
 
-    public async single() {
-        const response = await this.get()
+    public async single<T = any>() {
+        const response = await this.get<T>()
         if (response.length !== 1) {
             throw new Error(`Expected 1 result, got ${response.length}`)
         }
